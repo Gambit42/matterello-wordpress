@@ -1,0 +1,77 @@
+/*
+Theme Name: Matterello
+Description: Block theme for Matterello, a fresh pasta bar. Black, condensed type, a daily menu in a white frame.
+Version: 1.0.0
+Requires at least: 6.7
+Requires PHP: 8.1
+Text Domain: matterello
+*/
+
+body { -webkit-font-smoothing: antialiased; }
+
+/* The template-part wrapper is only header-tall, which traps sticky; remove its box so the header sticks to the page. */
+.wp-block-template-part:has(> .site-header) { display: contents; }
+/* Header sticks; on the home page it floats over the hero and turns black once scrolled (is-scrolled, set in matterello.js). */
+.site-header { position: sticky; top: var(--wp-admin--admin-bar--height, 0px); z-index: 10; background: var(--wp--preset--color--black); transition: background-color .3s; }
+.home .site-header { position: fixed; inset: var(--wp-admin--admin-bar--height, 0px) 0 auto; background: transparent; }
+.home .site-header.is-scrolled { background: var(--wp--preset--color--black); }
+.home .wp-site-blocks > main { margin-block-start: 0; }
+.site-header .wp-block-navigation a { text-decoration: none; }
+.site-header .wp-block-navigation a:hover { text-decoration: underline; }
+
+/* Arched wordmark and round mark, from [matterello_logo]. */
+.mt-logo-link { display: block; color: inherit; }
+.mt-logo { display: block; fill: currentColor; height: auto; }
+.mt-logo text { font-family: Oswald, sans-serif; font-weight: 500; }
+.mt-logo--header { width: 310px; }
+.mt-logo--card { width: 110px; margin: 0 auto -.4rem; }
+.mt-logo--mark { width: 68px; }
+
+.hero-chevron { display: inline-block; width: 34px; color: #fff; }
+.hero-chevron svg { display: block; }
+
+/* Location cards: dark fade so the name stays readable. */
+.location-card .wp-block-cover__background { background: linear-gradient(transparent 55%, rgba(0, 0, 0, .55)) !important; opacity: 1 !important; }
+.location-card h2 a { color: inherit; text-decoration: none; }
+
+/* Menu tables: dish left, price right in bold condensed. */
+.menu-table { margin: 0 0 var(--wp--preset--spacing--40); }
+.menu-table table { border-collapse: collapse; width: 100%; }
+.menu-table td, .menu-table th { border: 0; padding: 0 0 .32em; vertical-align: top; text-align: left; }
+.menu-table td + td, .menu-table th + th { text-align: right; white-space: nowrap; padding-left: 1.2em; font-family: Oswald, sans-serif; font-weight: 600; width: 1%; }
+.menu-table thead { border: 0; }
+.menu-table th { font-size: .62em; font-family: Oswald, sans-serif; font-weight: 600; }
+.menu-table figcaption { color: var(--wp--preset--color--smoke); font-style: italic; font-size: .8em; text-align: left; margin: .2em 0 0; }
+.menu-frame h3 { margin-bottom: .35em; }
+
+.site-footer a { text-underline-offset: 3px; }
+
+/* Motion. Load: hero arrow drops in. Scroll: children of sections/columns rise in, staggered (assets/js/matterello.js).
+   Hidden state only applies once JS has flagged <html>, so no-JS visitors still see everything. */
+@keyframes mt-rise { from { opacity: 0; transform: translateY(18px); } }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  main > .wp-block-cover:first-child .wp-block-cover__inner-container { animation: mt-rise .9s .3s cubic-bezier(.22, 1, .36, 1) both; }
+  .mt-js :is(main > .wp-block-group, main .wp-block-columns) > * {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .8s cubic-bezier(.22, 1, .36, 1), transform .8s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--mt-i, 0) * .12s);
+  }
+  .mt-js :is(main > .wp-block-group, main .wp-block-columns).is-in > * { opacity: 1; transform: none; }
+}
+
+@media (max-width: 781px) {
+  .site-header { display: flex !important; justify-content: space-between; align-items: center; padding: 1rem 1.25rem !important; }
+  .site-header > .wp-block-group:first-child { display: none; }
+  .site-header .wp-block-navigation { font-size: 1rem; gap: 1.25rem; }
+  .mt-logo--header { width: 170px; }
+  .location-card { min-height: 460px !important; }
+  .menu-frame { border-width: 5px !important; padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+}
+
+/* Back to top: shown after scrolling (is-shown, set in matterello.js). */
+.to-top { position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 30; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--wp--preset--color--white); color: var(--wp--preset--color--black); opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .3s, transform .3s, visibility .3s; }
+.to-top.is-shown { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { color: var(--wp--preset--color--black); opacity: .85; }
+.to-top svg { width: 22px; height: 22px; }
